@@ -1,0 +1,17 @@
+# render.yaml (Render deployment config)
+services:
+  - type: web
+    name: btc-trading-bot
+    env: python
+    buildCommand: |
+      apt-get update && apt-get install -y wget build-essential
+      wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+      tar -xzf ta-lib-0.4.0-src.tar.gz
+      cd ta-lib/
+      ./configure --prefix=/usr
+      make && make install
+      cd ..
+      rm -rf ta-lib ta-lib-0.4.0-src.tar.gz
+      pip install -r requirements.txt
+    startCommand: python live_trading_bot.py
+    plan: free
